@@ -119,6 +119,8 @@ All three APIs have free tiers — no credit card required.
 python phishing_analyzer.py suspicious_email.eml
 ```
 
+> 💡 **Don't have a test email?** A sample `.eml` file and its expected output are available in the [examples folder](https://github.com/aganrustemi-cyb/phishing_analyzer/tree/main/examples) so you can see the tool in action before using it on real emails.
+
 ---
 
 ## 📊 Sample Output
