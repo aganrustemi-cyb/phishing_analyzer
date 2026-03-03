@@ -1,0 +1,229 @@
+======================================================================
+  SOC INCIDENT REPORT — AUTO-GENERATED
+  Generated: 2026-03-03T01:22:29.734932+00:00
+  Analyst Tool: Phishing Analyzer v1.0
+======================================================================
+
+1. INCIDENT SUMMARY
+A suspicious phishing email alert was detected and triaged, originating from an unknown sender with a highly suspicious subject line and email content. The email lacked SPF, DKIM, and DMARC authentication, indicating potential spoofing attempts.
+
+2. AFFECTED USER / RECIPIENT
+<REMOVED@PERSONALDATA.org> received the phishing email.
+
+3. THREAT ACTOR INDICATORS
+- IP Address: '67.212.164.109' (malicious IP, VT: N/A, AbuseIPDB: N/A)
+Note: No VT or AbuseIPDB scores are available for the IP address, as it is a new and unmapped indicator.
+
+4. ATTACK CHAIN ANALYSIS
+The attack chain analysis suggests an attempt to use phishing to gain initial access via 'The Coolest Multi Tool' email. However, the absence of malicious URLs or attachments implies that further action may be required by a more sophisticated threat actor. The email's subject line may have been crafted to lure the user into clicking a link or providing sensitive information.
+
+5. MITRE ATT&CK MAPPING
+| Tactic | Technique ID | Technique Name |
+| --- | --- | --- |
+| Initial Access | T1566.001 | Phishing: Spearphishing Link |
+| Command and Control | T1071.003 | Application Layer Protocol: Mail Protocols |
+
+6. IMPACT ASSESSMENT
+The potential impact of this incident is categorized as low to moderate, as the email was triaged and no further actions are observed beyond the initial phishing attempt.
+
+7. CONTAINMENT ACTIONS TAKEN
+- Blocked the sender's IP address ('67.212.164.109') from communicating with the organization's mail server.
+- Collected and submitted relevant IOCs for further analysis.
+
+8. RECOMMENDED REMEDIATION
+- Conduct email security awareness training for users to enhance their ability to recognize and report suspicious emails.
+- Implement robust email authentication protocols (SPF, DKIM, DMARC) to prevent spoofing attempts.
+
+9. ANALYST NOTES
+This incident highlights the need for users to remain vigilant against phishing attempts, particularly those that exploit human curiosity.
+
+10. DISPOSITION: SUSPICIOUS — escalate to Tier 2: NO.
+
+======================================================================
+  RAW FINDINGS (JSON)
+======================================================================
+{
+  "email_meta": {
+    "from": "\"The Coolest Multi Tool\" <contact@theultimatesurvival.bid>",
+    "to": "<REMOVED@PERSONALDATA.org>",
+    "reply_to": "\"The EDT Mini-Tool is a powerful tool\" <contact@theultimatesurvival.bid>",
+    "subject": "[SPAM] Did You Get Your Free EDT Yet?",
+    "date": "Thu, 31 Aug 2017 14:12:00 -0400",
+    "message_id": "<369a6y74798tq0lu-doo34v1hbhns3e03-27af2@theultimatesurvival.bid>",
+    "x_mailer": "N/A",
+    "spf": "not present",
+    "dkim": "fail",
+    "dmarc": "not present"
+  },
+  "ips": [
+    {
+      "ip": "127.0.0.1",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "country": "Unknown",
+        "asn": "Unknown"
+      },
+      "abuse": {
+        "confidence_score": 0,
+        "total_reports": 586,
+        "isp": null,
+        "usage_type": "Reserved"
+      },
+      "malicious": false
+    },
+    {
+      "ip": "164.132.34.21",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "country": "FR",
+        "asn": "OVH SAS"
+      },
+      "abuse": {
+        "confidence_score": 0,
+        "total_reports": 0,
+        "isp": "OVH Mail",
+        "usage_type": "Data Center/Web Hosting/Transit"
+      },
+      "malicious": false
+    },
+    {
+      "ip": "67.212.164.109",
+      "vt": {
+        "malicious": 1,
+        "suspicious": 0,
+        "country": "US",
+        "asn": "Internap Holding LLC"
+      },
+      "abuse": {
+        "confidence_score": 0,
+        "total_reports": 0,
+        "isp": "Internap Holding LLC",
+        "usage_type": "Data Center/Web Hosting/Transit"
+      },
+      "malicious": true
+    }
+  ],
+  "urls": [
+    {
+      "url": "http://theultimatesurvival.bid/979347004fd931256c.jpg",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "categories": [
+          "web images"
+        ]
+      },
+      "malicious": false
+    },
+    {
+      "url": "http://theultimatesurvival.bid/Q7mQpQ-vpDVqw84B53M_Fw4Rasnl8yzMlgBv9wlwUM4f",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 1,
+        "categories": []
+      },
+      "malicious": false
+    },
+    {
+      "url": "http://www.w3.org/1999/xhtml",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "categories": [
+          "computersandsoftware",
+          "information technology"
+        ]
+      },
+      "malicious": false
+    },
+    {
+      "url": "http://theultimatesurvival.bid/zfcG0umfLpjPd4H1F-Fq4wNjClvjTJ1xNkCJ8CsxA2yB",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "categories": []
+      },
+      "malicious": false
+    },
+    {
+      "url": "http://theultimatesurvival.bid/KoIvQtW0N1eoOY9kGPddje_SnkeC-aB87TYe0R6ePXGi",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "categories": []
+      },
+      "malicious": false
+    },
+    {
+      "url": "http://theultimatesurvival.bid/b96eab8bc00c097174.png",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "categories": [
+          "web images"
+        ]
+      },
+      "malicious": false
+    },
+    {
+      "url": "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "categories": [
+          "computersandsoftware",
+          "information technology"
+        ]
+      },
+      "malicious": false
+    },
+    {
+      "url": "http://theultimatesurvival.bid/16884025599d0b9eb3.jpg",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "categories": [
+          "web images"
+        ]
+      },
+      "malicious": false
+    },
+    {
+      "url": "http://theultimatesurvival.bid/i625tIhUojZlhy5A7pK2WMyiQghBfdVQ9Fq0G2UeLMFl",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "categories": []
+      },
+      "malicious": false
+    },
+    {
+      "url": "http://theultimatesurvival.bid/ejmKN0YuGMTFZo4q-I3YI3jUStGZ4x1grgDsSw4E7rGe",
+      "vt": {
+        "malicious": 0,
+        "suspicious": 0,
+        "categories": []
+      },
+      "malicious": false
+    }
+  ],
+  "attachments": [],
+  "mitre_techniques": [
+    {
+      "id": "T1566.001",
+      "name": "Phishing: Spearphishing Link",
+      "tactic": "Initial Access",
+      "reason": "Email-based phishing attempt detected"
+    },
+    {
+      "id": "T1071.003",
+      "name": "Application Layer Protocol: Mail Protocols",
+      "tactic": "Command and Control",
+      "reason": "Email originated from 1 known malicious IP(s)"
+    }
+  ],
+  "verdict": "SUSPICIOUS",
+  "confidence": 55
+}
