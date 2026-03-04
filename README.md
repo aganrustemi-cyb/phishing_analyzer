@@ -1,222 +1,417 @@
-# 🔍 Phishing Email Analyzer — SOC Triage Automation Tool
 
-A Python-based CLI tool designed to automate the phishing email triage process that SOC Tier 1 analysts perform manually on every alert. Built as part of my cybersecurity portfolio while studying for CompTIA Security+ and working through the TryHackMe SOC Level 1 path.
 
----
+# PhishGuard — Phishing Email Analyzer (SOC Automation Tool)
 
-## 🎯 Why I Built This
-
-During my SOC studies I kept running into the same bottleneck: phishing triage is the most common Tier 1 task, but the process is entirely manual — open the email, copy the IPs, paste them into VirusTotal one by one, check AbuseIPDB, look up URLs, identify the attack technique, then write the incident report. That's 20–40 minutes per alert that could be automated.
-
-This tool compresses that entire workflow into a single command.
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![Flask](https://img.shields.io/badge/Flask-Web%20App-black)
+![Threat Intelligence](https://img.shields.io/badge/Threat%20Intel-VirusTotal%20%7C%20AbuseIPDB-orange)
+![MITRE ATT\&CK](https://img.shields.io/badge/MITRE-ATT%26CK-red)
+![Deployment](https://img.shields.io/badge/Deployed-PythonAnywhere-green)
 
 ---
 
-## ⚙️ What It Does
+# 🎯 Purpose of This Project
 
-Given a `.eml` file (a raw exported email), the tool automatically:
+**PhishGuard** is a SOC-focused phishing investigation automation tool designed to replicate the **workflow used by Tier 1 and Tier 2 security analysts** during phishing incident triage.
 
-- **Parses email headers** — extracts From, To, Reply-To, Message-ID, X-Mailer, and auth results (SPF / DKIM / DMARC)
-- **Flags reply-to mismatches** — a common phishing indicator where the reply address differs from the sender
-- **Extracts and analyzes all IPs** from `Received:` headers, skipping internal RFC1918 ranges
-- **Checks every IP** against VirusTotal (malicious vendor count, country, ASN) and AbuseIPDB (abuse confidence score, ISP, usage type, total reports)
-- **Extracts all URLs** from the email body and checks each against VirusTotal
-- **Detects URL shorteners** — bit.ly, tinyurl, t.co, etc.
-- **Analyzes attachments** — computes MD5 + SHA256 hashes, flags dangerous extensions, and performs VirusTotal hash lookups
-- **Maps all findings to MITRE ATT&CK** techniques automatically based on what was detected
-- **Generates a complete SOC incident report** using Groq's LLaMA 3.1 API — the same report a Tier 1 analyst would write manually after owning the alert
-- **Displays live API quota** after each run so you always know your remaining Groq requests
+The system parses `.eml` email files and automatically performs **indicator extraction, threat intelligence enrichment, MITRE ATT&CK mapping, and SOC report generation**.
 
----
+This project demonstrates hands-on experience with:
 
-## 🗺️ MITRE ATT&CK Techniques Mapped
+* phishing analysis
+* threat intelligence enrichment
+* SOC investigation workflows
+* security automation
+* Python security tooling
+* cloud deployment
 
-The tool automatically identifies and maps relevant techniques based on findings:
-
-| Indicator | Technique ID | Technique Name | Tactic |
-| --- | --- | --- | --- |
-| Email-based phishing | T1566.001 / T1566.002 | Spearphishing Attachment / Link | Initial Access |
-| SPF/DMARC failure | T1566.003 | Email Spoofing | Initial Access |
-| Reply-To mismatch | T1656 | Impersonation | Defense Evasion |
-| Malicious URLs | T1189 | Drive-by Compromise | Initial Access |
-| Malicious IPs | T1071.003 | Application Layer Protocol | Command & Control |
-| Executable attachments | T1204.002 | Malicious File Execution | Execution |
-| Macro-enabled Office files | T1137 | Office Application Startup | Persistence |
-| Script attachments (.vbs/.ps1/.js) | T1059 | Command and Scripting Interpreter | Execution |
-| LNK shortcut files | T1547.009 | Shortcut Modification | Persistence |
+The goal is to **reduce manual investigation time** and simulate how phishing alerts are handled in real-world Security Operations Centers.
 
 ---
 
-## 📄 Auto-Generated Incident Report
+# 🌐 Live Demo
 
-After triage completes, the tool sends all findings to **LLaMA 3.1 via Groq** and generates a professional incident report saved as a timestamped `.txt` file. The report follows the structure used in real SOC environments (ServiceNow / Jira):
+Web application deployed on **PythonAnywhere**
 
 ```
-1. INCIDENT SUMMARY
-2. AFFECTED USER / RECIPIENT
-3. THREAT ACTOR INDICATORS
-4. ATTACK CHAIN ANALYSIS
-5. MITRE ATT&CK MAPPING
-6. IMPACT ASSESSMENT
-7. CONTAINMENT ACTIONS TAKEN
-8. RECOMMENDED REMEDIATION
-9. ANALYST NOTES
-10. DISPOSITION + ESCALATION DECISION
+https://agancyber.pythonanywhere.com
+```
+
+The tool can analyze `.eml` phishing emails directly through the browser.
+
+---
+
+
+# 🏗 Architecture Overview
+
+```
+              Email (.eml)
+                   │
+                   ▼
+            Indicator Extraction
+       (headers, IPs, URLs, attachments)
+                   │
+                   ▼
+        Threat Intelligence Enrichment
+      ┌───────────────┬───────────────┬───────────────┐
+      │ VirusTotal    │ AbuseIPDB     │ Shodan        │
+      │ URL/IP/File   │ IP reputation │ Infra intel   │
+      └───────────────┴───────────────┴───────────────┘
+                   │
+                   ▼
+             YARA Rule Scanning
+                   │
+                   ▼
+           MITRE ATT&CK Mapping
+                   │
+                   ▼
+         Automated SOC Incident Report
+                   │
+                   ▼
+             Web UI (Flask)
+                   │
+                   ▼
+           PythonAnywhere Deployment
 ```
 
 ---
 
-## 🛠️ Tech Stack
+# 🔎 Features
 
-| Component | Tool |
-| --- | --- |
-| Language | Python 3.8+ |
-| IP Reputation | VirusTotal API v3 + AbuseIPDB API v2 |
-| URL/Hash Analysis | VirusTotal API v3 |
-| Threat Intelligence Framework | MITRE ATT&CK |
-| AI Report Generation | Groq API (LLaMA 3.1 8B Instant) |
-| Email Parsing | Python `email` stdlib |
-| HTTP Requests | `requests` |
+## Email Header Analysis
+
+Extracts and analyzes:
+
+* Sender
+* Recipient
+* Reply-To address
+* Message ID
+* Mailer
+* SPF authentication
+* DKIM authentication
+* DMARC authentication
+
+Security detections include:
+
+* Reply-To spoofing
+* Authentication failures
+* Header anomalies
+
+These signals contribute to the **overall threat confidence score**.
 
 ---
 
-## 🚀 Setup & Usage
+# 🌍 IP Threat Intelligence
 
-### 1. Clone the repo
+IPs extracted from `Received` headers are analyzed using:
 
-```bash
+* **VirusTotal**
+* **AbuseIPDB**
+* **Shodan**
+
+Data collected includes:
+
+* malicious detections
+* suspicious detections
+* ASN ownership
+* geolocation
+* ISP information
+* abuse confidence score
+* exposed services
+* open ports
+* CVE vulnerabilities
+
+This provides infrastructure intelligence around phishing campaigns.
+
+---
+
+# 🔗 URL Analysis
+
+URLs embedded inside emails are analyzed through:
+
+**VirusTotal URL reputation scanning**
+
+Checks include:
+
+* malicious detections
+* suspicious detections
+* phishing category tags
+* URL shortener detection
+
+Shortened URLs are flagged as a **phishing evasion technique**.
+
+---
+
+# 📎 Attachment Analysis
+
+Attachments are inspected for:
+
+* file type
+* file size
+* MD5 hash
+* SHA256 hash
+
+Security checks include:
+
+* suspicious file extensions
+* VirusTotal hash lookup
+* **YARA rule scanning**
+
+This replicates how SOC teams analyze potentially malicious email attachments.
+
+---
+
+# 🧠 MITRE ATT&CK Mapping
+
+Indicators are mapped to MITRE ATT&CK techniques to provide structured threat intelligence context.
+
+Examples include:
+
+| Technique | Description                 |
+| --------- | --------------------------- |
+| T1566.001 | Spearphishing Attachment    |
+| T1566.002 | Spearphishing Link          |
+| T1566.003 | Phishing via Email Spoofing |
+| T1656     | Impersonation               |
+
+This allows analysts to quickly understand **attacker tactics and techniques**.
+
+---
+
+# 📄 Automated SOC Report Generation
+
+After analysis completes, the system automatically generates a **SOC-style investigation report** including:
+
+* investigation summary
+* indicator findings
+* threat intelligence results
+* MITRE ATT&CK techniques
+* threat verdict
+* confidence score
+
+Reports can be downloaded and attached to **SIEM alerts or ticketing systems**.
+
+---
+
+# 📦 Batch Email Analysis
+
+Multiple phishing emails can be analyzed simultaneously.
+
+Batch processing allows analysts to:
+
+* triage phishing campaigns
+* identify shared indicators
+* compare verdicts across emails
+
+This simulates **large-scale phishing investigations** handled by SOC teams.
+
+---
+
+# 🖥 Web Interface
+
+The analyzer includes a **Flask-based investigation console** for uploading and analyzing phishing emails.
+
+Features include:
+
+* drag & drop `.eml` upload
+* batch email processing
+* interactive investigation results
+* threat verdict scoring
+* expandable investigation panels
+* downloadable SOC reports
+
+The interface renders dynamic analysis results using Jinja templates. 
+
+The UI acts as a lightweight **SOC phishing investigation dashboard**. 
+
+---
+
+# ☁️ Deployment
+
+The application is deployed on **PythonAnywhere**, demonstrating experience with:
+
+* Flask web applications
+* WSGI configuration
+* cloud hosting
+* security tooling deployment
+
+This transforms the analyzer from a **local script into a usable web-based security tool**.
+
+---
+
+# 🧰 Technology Stack
+
+### Backend
+
+* Python
+* Flask
+* Requests
+* YARA
+
+### Threat Intelligence APIs
+
+* VirusTotal
+* AbuseIPDB
+* Shodan
+* Groq AI
+
+### Frontend
+
+* HTML
+* TailwindCSS
+* Jinja2 templates
+
+### Deployment
+
+* PythonAnywhere
+* WSGI
+
+---
+
+# 📂 Project Structure
+
+```
+phishing_analyzer/
+│
+├── app.py
+├── phishing_analyzer.py
+│
+├── templates/
+│   ├── index.html
+│   ├── results.html
+│   ├── batch_results.html
+│   └── settings.html
+│
+├── rules/
+│   └── phishing_basic.yar
+│
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# 🧪 Example SOC Workflow
+
+Typical analyst workflow:
+
+1. Receive phishing alert from SIEM or email gateway
+2. Export suspicious email as `.eml`
+3. Upload email to PhishGuard
+4. Tool extracts indicators automatically
+5. Indicators enriched via threat intelligence APIs
+6. MITRE ATT&CK techniques mapped
+7. SOC investigation report generated
+
+This reduces manual investigation steps typically required during **phishing incident triage**.
+
+---
+
+# 🖼 Screenshots
+
+
+### Upload Console and Investigation Dashbord
+
+![brave_dcktXbKhQB](https://github.com/user-attachments/assets/15a1da2f-3396-41be-858d-ee1f9d54ec6e)
+
+
+### Api Configuration 
+
+![brave_NktOyqQmhv](https://github.com/user-attachments/assets/d4f688c1-5544-431a-b022-2ab670fd7519)
+
+
+### Threat Intelligence Results
+
+![sublime_text_zlEWlrc2nD](https://github.com/user-attachments/assets/7b6cfc3c-ae09-4448-9323-c3aaebb9290d)
+
+
+---
+
+🚀 Setup & Usage (Local CLI)
+
+This tool runs locally as a standalone SOC phishing triage utility. It analyzes exported .eml emails, enriches indicators with threat intelligence, maps findings to MITRE ATT&CK, and generates a SOC incident report.
+
+1. Clone the repo
 git clone https://github.com/yourusername/phishing-analyzer.git
 cd phishing-analyzer
-```
+2. Install dependencies
 
-### 2. Install dependencies
+Minimum required (for IP/URL enrichment and report generation):
 
-```bash
 pip install requests
-```
 
-### 3. Add your API keys
+Recommended (full feature set):
 
-Open `phishing_analyzer.py` and fill in the config section at the top:
+pip install requests shodan yara-python
 
-```python
-VT_API_KEY    = "your_virustotal_key"     # virustotal.com — free
-ABUSEIPDB_KEY = "your_abuseipdb_key"      # abuseipdb.com — free
-GROQ_KEY      = "your_groq_key"           # console.groq.com — free
-```
+✅ Optional integrations (tool still works without these):
 
-All three APIs have free tiers — no credit card required.
+shodan → adds infrastructure intelligence (ports, org, CVEs)
 
-### 4. Export a suspicious email as .eml
+yara-python → scans attachments using rules/*.yar
 
-- **Gmail**: Open email → three dots → *Download message*
-- **Outlook**: File → Save As → `.eml` format
-- **Thunderbird**: Drag email to desktop
+🔑 Configuration (API Keys)
 
-### 5. Run the tool
+The script uses these API keys (free tiers available):
 
-```bash
-python phishing_analyzer.py suspicious_email.eml
-```
+VirusTotal → IP, URL, and file hash lookups
 
-> 💡 **Don't have a test email?** A sample `.eml` file and its expected output are available in the [examples folder](https://github.com/aganrustemi-cyb/phishing_analyzer/tree/main/examples) so you can see the tool in action before using it on real emails.
+AbuseIPDB → IP reputation scoring
+
+Groq → auto-generates the SOC incident report (LLaMA 3.1)
+
+Shodan (optional) → host intelligence and CVE visibility
+
+Open phishing_analyzer.py and set the config section:
+
+VT_API_KEY    = ""  # free at virustotal.com
+ABUSEIPDB_KEY = ""  # free at abuseipdb.com
+GROQ_KEY      = ""  # free at console.groq.com
+SHODAN_KEY    = ""  # free at shodan.io → My Account
+What happens if keys/modules are missing?
+
+If Shodan is not installed or no key is configured → Shodan lookups are skipped automatically
+
+If YARA is not installed or no rules exist → YARA scanning is skipped automatically
+
+If Groq key is missing/invalid → triage still runs, but report generation fails at the final stage
 
 ---
 
-## 📊 Sample Output
+# 🧑‍💻 Author
+
+**Agan Rustemi**
+SOC Analyst | Cybersecurity Enthusiast
+Skopje, North Macedonia (Open to Remote Roles)
+
+This project demonstrates practical experience with:
+
+* SOC investigation workflows
+* phishing analysis
+* threat intelligence enrichment
+* MITRE ATT&CK mapping
+* security automation
+* Python security tooling
+* cloud deployment
+
+GitHub:
 
 ```
-=======================================================
-  PHISHING EMAIL ANALYZER — SOC Triage Tool
-  Target: suspicious_email.eml
-  Time:   2026-03-03T14:22:11+00:00
-=======================================================
-
-=======================================================
-  PARSING EMAIL
-=======================================================
-  From       : "IT Support" <support@ev1l-domain.ru>
-  To         : victim@company.com
-  Reply-To   : attacker@gmail.com
-  Subject    : Urgent: Password Reset Required
-  SPF        : fail
-  DKIM       : fail
-  DMARC      : fail
-  ⚠️  FLAG: Reply-To mismatch detected (support@ev1l-domain.ru → attacker@gmail.com)
-  ⚠️  FLAG: SPF FAIL
-  ⚠️  FLAG: DKIM FAIL
-
-=======================================================
-  EXTRACTING IPs
-=======================================================
-  [IP] 45.33.32.156
-       VT  → Malicious: 14 | Suspicious: 3 | Country: RU | ASN: Serverius
-       ADB → Abuse Score: 87/100 | Reports: 423 | ISP: Serverius | Type: Hosting
-
-=======================================================
-  MITRE ATT&CK MAPPING
-=======================================================
-  [Initial Access]      T1566.001 — Phishing: Spearphishing Attachment
-  [Defense Evasion]     T1656     — Impersonation
-  [Command and Control] T1071.003 — Application Layer Protocol: Mail Protocols
-
-=======================================================
-  VERDICT
-=======================================================
-  🔴  MALICIOUS  (Confidence Score: 95/100)
-
-  📊 GROQ API QUOTA
-     Requests  : 27/30 remaining  (resets in 43s)
-     Tokens    : 13800/14400 remaining  (resets in 43s)
-
-  ✅ Report saved to: SOC_Report_20260303_142214.txt
+https://github.com/aganrustemi-cyb
 ```
 
 ---
 
-## 📁 Project Structure
+# ⚠ Disclaimer
 
-```
-phishing-analyzer/
-├── phishing_analyzer.py    # Main tool
-├── README.md               # This file
-└── samples/
-    └── test_email.eml      # Safe sample .eml for testing
-```
+This project is intended for **educational and security research purposes only**.
 
 ---
 
-## 🔮 Planned Improvements
+## 💡 Portfolio Note
 
-- [ ] Add `--batch` flag to process a folder of `.eml` files at once
-- [ ] Export report to `.pdf` format
-- [ ] Add Shodan lookup for IPs
-- [ ] Build a simple web UI with Flask
-- [ ] Integrate with TheHive for automated case creation
-- [ ] Add YARA rule scanning for attachments
+This project was built as part of a **SOC Analyst portfolio lab** to demonstrate hands-on investigation skills and security automation capabilities.
 
 ---
 
-## 📚 What I Learned
 
-Building this tool pushed me to go deeper than just studying concepts — I had to understand exactly how phishing attacks work at a technical level to map them correctly to MITRE techniques. Parsing raw email headers, understanding how SPF/DKIM/DMARC authentication failures indicate spoofing, and structuring an incident report the way a real SOC team expects it gave me hands-on exposure to workflows I'll be doing from day one on the job.
-
----
-
-## 🤝 Acknowledgements
-
-- [MITRE ATT&CK Framework](https://attack.mitre.org/) — technique mapping reference
-- [VirusTotal API v3 Docs](https://developers.virustotal.com/reference/overview)
-- [AbuseIPDB API Docs](https://docs.abuseipdb.com/)
-- [Groq API Docs](https://console.groq.com/docs)
-- Claude AI (Anthropic) — assisted with code structure and debugging
-
----
-
-## ⚠️ Disclaimer
-
-This tool is intended for defensive security research and SOC analyst training only. Only analyze emails you have explicit permission to investigate. Never use against systems you do not own.
-
----
-
-*Built by a SOC analyst in training | Part of my cybersecurity portfolio*
