@@ -329,7 +329,7 @@ This reduces manual investigation steps typically required during **phishing inc
 
 ## 🚀 Setup & Usage (Local CLI)
 
-This tool also runs locally as a **standalone SOC phishing triage utility**. It analyzes exported `.eml` emails, enriches indicators with threat intelligence, maps findings to **MITRE ATT&CK**, and generates a SOC incident report.
+The analyzer can also be run locally as a CLI tool for analyzing exported .eml phishing emails.
 
 ---
 
