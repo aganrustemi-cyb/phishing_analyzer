@@ -33,9 +33,9 @@ The goal is to **reduce manual investigation time** and simulate how phishing al
 
 Web application deployed on **PythonAnywhere**
 
-```
-https://agancyber.pythonanywhere.com
-```
+
+[PhishGuard - Email Threat Analyzer](https://agancyber.pythonanywhere.com)
+
 
 The tool can analyze `.eml` phishing emails directly through the browser.
 
