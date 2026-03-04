@@ -327,54 +327,68 @@ This reduces manual investigation steps typically required during **phishing inc
 
 ---
 
-🚀 Setup & Usage (Local CLI)
+## 🚀 Setup & Usage (Local CLI)
 
-This tool runs locally as a standalone SOC phishing triage utility. It analyzes exported .eml emails, enriches indicators with threat intelligence, maps findings to MITRE ATT&CK, and generates a SOC incident report.
+This tool also runs locally as a **standalone SOC phishing triage utility**. It analyzes exported `.eml` emails, enriches indicators with threat intelligence, maps findings to **MITRE ATT&CK**, and generates a SOC incident report.
 
-1. Clone the repo
+---
+
+### 1. Clone the repo
+
+```bash
 git clone https://github.com/yourusername/phishing-analyzer.git
 cd phishing-analyzer
-2. Install dependencies
+```
+
+---
+
+### 2. Install dependencies
 
 Minimum required (for IP/URL enrichment and report generation):
 
+```bash
 pip install requests
+```
 
 Recommended (full feature set):
 
+```bash
 pip install requests shodan yara-python
+```
 
-✅ Optional integrations (tool still works without these):
+✅ **Optional integrations** (tool still works without these):
 
-shodan → adds infrastructure intelligence (ports, org, CVEs)
+* `shodan` → adds infrastructure intelligence (ports, org, CVEs)
+* `yara-python` → scans attachments using `rules/*.yar`
 
-yara-python → scans attachments using rules/*.yar
+---
 
-🔑 Configuration (API Keys)
+## 🔑 Configuration (API Keys)
 
 The script uses these API keys (free tiers available):
 
-VirusTotal → IP, URL, and file hash lookups
+* **VirusTotal** → IP, URL, and file hash lookups
+* **AbuseIPDB** → IP reputation scoring
+* **Groq** → auto-generates the SOC incident report (LLaMA 3.1)
+* **Shodan (optional)** → host intelligence and CVE visibility
 
-AbuseIPDB → IP reputation scoring
+Open `phishing_analyzer.py` and fill in the config section at the top:
 
-Groq → auto-generates the SOC incident report (LLaMA 3.1)
-
-Shodan (optional) → host intelligence and CVE visibility
-
-Open phishing_analyzer.py and set the config section:
-
+```python
 VT_API_KEY    = ""  # free at virustotal.com
 ABUSEIPDB_KEY = ""  # free at abuseipdb.com
 GROQ_KEY      = ""  # free at console.groq.com
 SHODAN_KEY    = ""  # free at shodan.io → My Account
-What happens if keys/modules are missing?
+```
 
-If Shodan is not installed or no key is configured → Shodan lookups are skipped automatically
+---
 
-If YARA is not installed or no rules exist → YARA scanning is skipped automatically
+## ❓ What happens if keys/modules are missing?
 
-If Groq key is missing/invalid → triage still runs, but report generation fails at the final stage
+* If **Shodan** is not installed or no key is configured → Shodan lookups are **skipped automatically**
+* If **YARA** is not installed or no rules exist → YARA scanning is **skipped automatically**
+* If **Groq key** is missing/invalid → triage still runs, but **report generation fails** at the final stage
+
 
 ---
 
