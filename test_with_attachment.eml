@@ -1,0 +1,29 @@
+Content-Type: multipart/mixed; boundary="===============5943914793530739170=="
+MIME-Version: 1.0
+From: "IT Support" <support@malicious-domain.ru>
+To: victim@company.com
+Reply-To: attacker@gmail.com
+Subject: Urgent: Your password expires today
+Date: Mon, 03 Mar 2026 10:00:00 +0000
+Message-ID: <abc123@malicious-domain.ru>
+Received: from mail.malicious-domain.ru (45.33.32.156) by mx.company.com
+Authentication-Results: mx.company.com; spf=fail; dkim=fail; dmarc=fail
+
+--===============5943914793530739170==
+Content-Type: text/html; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+<html><body>Click here to reset your password: http://malicious-site.com/reset
+Your account will be suspended in 24 hours.</body></html>
+--===============5943914793530739170==
+Content-Type: application/octet-stream
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="invoice.doc"
+
+VGhpcyBkb2N1bWVudCBoYXMgQXV0b09wZW4gbWFjcm8gV1NjcmlwdC5TaGVsbCBjbWQuZXhlIC9j
+IFBvd2VyU2hlbGwgLWVuY29kZWQgcGFzc3dvcmQgcmVzZXQgY2xpY2sgaGVyZSBzdXNwZW5kZWQg
+ZXhwaXJlcyB0b2RheQ==
+
+--===============5943914793530739170==--

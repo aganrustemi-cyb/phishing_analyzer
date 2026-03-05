@@ -1,0 +1,161 @@
+======================================================================
+  SOC INCIDENT REPORT — AUTO-GENERATED
+  Generated: 2026-03-04T00:46:24.928864+00:00
+  Analyst Tool: Phishing Analyzer v1.0
+======================================================================
+
+### INCIDENT REPORT
+
+1. **INCIDENT SUMMARY**
+Incident ID: SOC-2023-001
+Date: 2023-03-04
+Time: 14:00 UTC
+Incident Description: Malicious phishing email alert triggered; email spoofed as "IT Support" from a malicious sender domain.
+
+2. **AFFECTED USER / RECIPIENT**
+Victim Email: victim@company.com
+User Affected: [No information available]
+
+3. **THREAT ACTOR INDICATORS**
+- Malicious IPs: 45.33.32.156 (AbuseIPDB Score: High Risk)
+- Malicious URLs:
+  * http://malicious-site.com/reset (VirusTotal Score: 10/69)
+- Attachments:
+  * invoice.doc (VirusTotal Score: 10/69, MD5 Hash: Not provided)
+
+4. **ATTACK CHAIN ANALYSIS**
+The attack began when the victim received a phishing email from a spoofed "IT Support" sender, claiming their password would expire today. The email was sent from a malicious sender domain, 'malicious-domain.ru,' which failed SPF, DKIM, and DMARC checks. The email contained a malicious link to http://malicious-site.com/reset, which likely aimed to download malware or conduct reconnaissance via 'Application Layer Protocol: Mail Protocols' (T1071.003). Upon clicking the link, the victim's machine might have been compromised via 'Drive-by Compromise' (T1189), allowing the attacker to gain 'Initial Access' (T1566.001, T1566.003). The attacker may have then used 'Phishing for Information: Spearphishing Link' (T1598.003) to gather more sensitive information.
+
+5. **MITRE ATT&CK MAPPING**
+| Tactic | Technique ID | Technique Name |
+| :------ | :----------- | :-------------- |
+| Initial Access | T1566.001 | Phishing: Spearphishing Attachment |
+| Initial Access | T1566.003 | Phishing: Spearphishing via Email Spoofing |
+| Defense Evasion | T1656 | Impersonation |
+| Initial Access | T1189 | Drive-by Compromise |
+| Reconnaissance | T1598.003 | Phishing for Information: Spearphishing Link |
+| Command and Control | T1071.003 | Application Layer Protocol: Mail Protocols |
+
+6. **IMPACT ASSESSMENT**
+Potential impact: Exposure of sensitive information, system compromise, and potential data exfiltration.
+
+7. **CONTAINMENT ACTIONS TAKEN**
+- Blocked the malicious sender 'malicious-domain.ru' (Sender Policy Framework (SPF) fail)
+- Submitted IOCs (Malicious IPs, URLs, and attachment hashes) to Threat intelligence services
+- Notified relevant teams to increase monitoring for potential follow-up activity
+
+8. **RECOMMENDED REMEDIATION**
+- Conduct a thorough investigation to determine potential vulnerabilities exploited in the initial attack
+- Implement additional security measures to prevent future spoofing attempts, such as SPF and DKIM configuration updates
+- Provide users with additional phishing awareness training
+- Update and run regular antivirus scans on all systems
+- Monitor system logs and network traffic for potential signs of lateral movement
+
+9. **ANALYST NOTES**
+SOC analyst verified malicious indicators and confirmed the initial assessment of MALICIOUS (confidence: 100/100)
+
+10. **DISPOSITION: MALICIOUS — ESCALATE TO TIER 2: YES**
+
+======================================================================
+  RAW FINDINGS (JSON)
+======================================================================
+{
+  "email_meta": {
+    "from": "\"IT Support\" <support@malicious-domain.ru>",
+    "to": "victim@company.com",
+    "reply_to": "attacker@gmail.com",
+    "subject": "Urgent: Your password expires today",
+    "date": "Mon, 03 Mar 2026 10:00:00 +0000",
+    "message_id": "<abc123@malicious-domain.ru>",
+    "x_mailer": "N/A",
+    "spf": "fail",
+    "dkim": "fail",
+    "dmarc": "fail"
+  },
+  "ips": [
+    {
+      "ip": "45.33.32.156",
+      "vt": {
+        "malicious": 4,
+        "suspicious": 1,
+        "country": "US",
+        "asn": "Akamai Connected Cloud"
+      },
+      "abuse": {
+        "confidence_score": 0,
+        "total_reports": 3,
+        "isp": "Linode",
+        "usage_type": "Data Center/Web Hosting/Transit"
+      },
+      "malicious": true,
+      "shodan": {}
+    }
+  ],
+  "urls": [
+    {
+      "url": "http://malicious-site.com/reset",
+      "vt": {
+        "malicious": 7,
+        "suspicious": 1,
+        "categories": [
+          "Suspicious (alphaMountain.ai)",
+          "spyware and malware"
+        ]
+      },
+      "malicious": true
+    }
+  ],
+  "attachments": [
+    {
+      "filename": "invoice.doc",
+      "content_type": "application/octet-stream",
+      "size_bytes": 127,
+      "md5": "3255e64963579f14fbc72cbb55581366",
+      "sha256": "71910f6ab05dd19e455fe846a692a106da5594ce75aa1caafaf6e7fdc3f3e774",
+      "suspicious_ext": false,
+      "vt": {},
+      "malicious": false,
+      "yara_matches": []
+    }
+  ],
+  "mitre_techniques": [
+    {
+      "id": "T1566.001",
+      "name": "Phishing: Spearphishing Attachment",
+      "tactic": "Initial Access",
+      "reason": "Email-based phishing attempt detected"
+    },
+    {
+      "id": "T1566.003",
+      "name": "Phishing: Spearphishing via Email Spoofing",
+      "tactic": "Initial Access",
+      "reason": "SPF/DMARC failure suggests sender spoofing"
+    },
+    {
+      "id": "T1656",
+      "name": "Impersonation",
+      "tactic": "Defense Evasion",
+      "reason": "Reply-To address differs from From address"
+    },
+    {
+      "id": "T1189",
+      "name": "Drive-by Compromise",
+      "tactic": "Initial Access",
+      "reason": "1 malicious URL(s) detected"
+    },
+    {
+      "id": "T1598.003",
+      "name": "Phishing for Information: Spearphishing Link",
+      "tactic": "Reconnaissance",
+      "reason": "Malicious links may lead to credential harvesting pages"
+    },
+    {
+      "id": "T1071.003",
+      "name": "Application Layer Protocol: Mail Protocols",
+      "tactic": "Command and Control",
+      "reason": "Email originated from 1 known malicious IP(s)"
+    }
+  ],
+  "verdict": "MALICIOUS",
+  "confidence": 100
+}
