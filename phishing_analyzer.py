@@ -7,7 +7,7 @@
                Parses .eml files, checks IPs/URLs/hashes
                against VirusTotal & AbuseIPDB, maps findings
                to MITRE ATT&CK, and auto-generates a SOC
-               incident report via Claude AI.
+               incident report via Groq AI
 ============================================================
 """
 
